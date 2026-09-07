@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+env/
+venv/
+ENV/
+.pytest_cache/
+.coverage
+htmlcov/
+*.db
+*.sqlite3
+*.sqlite
+backend/label_compliance.db
+backend/uploads/
+uploads/
+backend/.env
+
+# Flutter / Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+frontend/label_checker/build/
+frontend/label_checker/.dart_tool/
+frontend/label_checker/.flutter-plugins
+frontend/label_checker/.flutter-plugins-dependencies
+
+# IDE & OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/
+*.iml
+
+# Sensitive credentials
+*credentials*.json
+*service-account*.json

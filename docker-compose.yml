@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+  # ── PostgreSQL Database ──────────────────────────────────
+  db:
+    image: postgres:16-alpine
+    container_name: label_compliance_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: labelcheck
+      POSTGRES_PASSWORD: labelcheck_dev
+      POSTGRES_DB: label_compliance
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U labelcheck -d label_compliance"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ── FastAPI Backend ──────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: label_compliance_backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: "postgresql+asyncpg://labelcheck:labelcheck_dev@db:5432/label_compliance"
+      OCR_ENGINE: paddle
+      UPLOAD_DIR: /app/uploads
+    volumes:
+      - ./backend:/app  # Hot-reload during development
+      - upload_data:/app/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+    driver: local
+  upload_data:
+    driver: local
