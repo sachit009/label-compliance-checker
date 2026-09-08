@@ -189,9 +189,9 @@ async def get_scan_history(
 
     if status:
         try:
-            status_enum = DBOverallStatus(status.upper())
-            query = query.where(Scan.overall_status == status_enum)
-            count_query = count_query.where(Scan.overall_status == status_enum)
+            status_enum = OverallStatus(status.upper())
+            query = query.where(Scan.overall_status == status_enum.value)
+            count_query = count_query.where(Scan.overall_status == status_enum.value)
         except ValueError:
             raise HTTPException(
                 status_code=400,

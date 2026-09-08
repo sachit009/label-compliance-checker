@@ -8,10 +8,12 @@ class ApiService {
   late final Dio _dio;
 
   static String get defaultBaseUrl {
+    const fromEnv = String.fromEnvironment('API_BASE_URL');
+    if (fromEnv.isNotEmpty) return fromEnv;
     if (kIsWeb) return Uri.base.origin;
     try {
       if (Platform.isAndroid) return 'http://10.0.2.2:8000';
-      if (Platform.isIOS) return 'http://10.14.57.179:8000';
+      if (Platform.isIOS) return 'http://127.0.0.1:8000';
     } catch (_) {}
     return 'http://localhost:8000';
   }

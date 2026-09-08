@@ -6,8 +6,12 @@ import logging
 from abc import ABC, abstractmethod
 from typing import Optional
 
-import cv2
-import numpy as np
+try:
+    import cv2
+    import numpy as np
+except ImportError:
+    cv2 = None
+    np = None
 
 logger = logging.getLogger(__name__)
 
@@ -63,6 +67,10 @@ class PaddleOCREngine(OCREngine):
         return "paddle"
 
     def extract_text(self, image_bytes: bytes) -> str:
+        if cv2 is None or np is None or self._ocr is None:
+            logger.warning("PaddleOCR/OpenCV engine is not loaded; returning empty extracted text.")
+            return ""
+
         # Decode image bytes to numpy array
         nparr = np.frombuffer(image_bytes, np.uint8)
         image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)

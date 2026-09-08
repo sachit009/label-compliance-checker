@@ -99,7 +99,7 @@ from fastapi.staticfiles import StaticFiles
 app.include_router(scan_router)
 
 
-@app.get("/health", tags=["Health"])
+@app.api_route("/health", methods=["GET", "HEAD"], tags=["Health"])
 async def health_check():
     """Health check endpoint."""
     return {
@@ -110,17 +110,19 @@ async def health_check():
     }
 
 
-# Mount Flutter Web App if build exists
+# Mount Web App (static client or Flutter build)
+static_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "static"))
 web_dir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "../../frontend/label_checker/build/web")
 )
-if os.path.exists(web_dir):
-    app.mount("/app", StaticFiles(directory=web_dir, html=True), name="flutter_app")
+app_dir = static_dir if os.path.exists(static_dir) else (web_dir if os.path.exists(web_dir) else None)
+if app_dir:
+    app.mount("/app", StaticFiles(directory=app_dir, html=True), name="web_app")
 
 
-@app.get("/", include_in_schema=False)
+@app.api_route("/", methods=["GET", "HEAD"], include_in_schema=False)
 async def root():
-    """Redirect root to Flutter app or API docs."""
-    if os.path.exists(web_dir):
+    """Redirect root to web app or API docs."""
+    if app_dir:
         return RedirectResponse(url="/app/")
     return RedirectResponse(url="/docs")
