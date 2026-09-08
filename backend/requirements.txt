@@ -23,7 +23,7 @@ spacy==3.7.6
 
 # Utilities
 python-dotenv==1.2.3
-Pillow==12.3.0
+pillow==12.3.0
 aiofiles==24.1.0
 pydantic-settings==2.5.2
 
