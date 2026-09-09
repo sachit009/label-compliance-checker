@@ -1,0 +1,4 @@
+# Ensure GitHub Linguist highlights Python as the primary language
+*.py linguist-detectable=true
+backend/app/static/* linguist-vendored=true
+frontend/label_checker/build/* linguist-vendored=true

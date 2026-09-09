@@ -1,5 +1,0 @@
-package com.example.label_checker
-
-import io.flutter.embedding.android.FlutterActivity
-
-class MainActivity : FlutterActivity()
